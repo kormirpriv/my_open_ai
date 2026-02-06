@@ -1,14 +1,16 @@
-[project]
+[tool.poetry]
 name = "my-open-ai"
 version = "0.1.0"
-description = ""
-authors = [
-    {name = "MiroslawKordiak",email = "miroslawkordiak@gmail.com"}
-]
-requires-python = ">=3.12"
-dependencies = [
+description = "Projekt z OpenAI i Python 3.12"
+authors = ["Miroslaw Kordiak <miroslawkordiak@gmail.com>"]
+packages = [
+    { include = "my_open_ai" }
 ]
 
+[tool.poetry.dependencies]
+python = "^3.12"
+openai = "^1.31.0"
+pyyaml = "^6.0.3"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
