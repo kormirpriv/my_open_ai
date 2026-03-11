@@ -7,6 +7,7 @@ class Config:
             cfg = yaml.safe_load(f)
         self.openai_api_key = cfg["openai"]["api_key"]
         self.model_name = cfg["openai"].get("model", "gpt-4o-mini")
+        self.weather_api_key = cfg['weather'].get('api_key')
 
 
 config = Config()
