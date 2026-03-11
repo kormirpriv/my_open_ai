@@ -6,6 +6,8 @@ WEATHER_API_KEY = config.weather_api_key
 
 
 def get_weather(city: str) -> str:
+    if not city:
+        return "Nie podałeś miasta"
     url = "https://api.openweathermap.org/data/2.5/weather"
     params = {"q": city, "appid": WEATHER_API_KEY, "units": "metric", "lang": "pl"}
 

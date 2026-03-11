@@ -1,5 +1,4 @@
-weather_tool = [
-    {
+weather_tool =  {
         "name": "get_weather",
         "type": "function",  # wymagane
         "description": "Check actual weather in the given city",
@@ -18,5 +17,4 @@ weather_tool = [
             ]
         }
     }
-]
 
