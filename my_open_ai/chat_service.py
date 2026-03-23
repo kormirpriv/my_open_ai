@@ -7,44 +7,47 @@ from my_open_ai.tools.tool_registry import TOOL_FUNCTIONS, TOOLS
 
 setup_logging()
 logger = logging.getLogger(__name__)
+
+
 class ChatService:
     def __init__(self):
         self.messages = [
             {
                 "role": "system",
                 "content": "I'm pretty smart chatbot. "
-                           "You can use function or ask me about my opinion.",
+                "You can use function or ask me about my opinion.",
             }
         ]
 
     def ask(self, user_input: str):
         self.messages.append({"role": "user", "content": user_input})
-
-        # 🔹 for loop tool calls (max 5)
-        for _ in range(5):
+        max_call = 5
+        call_left = max_call
+        while call_left:
 
             response = client.responses.create(
                 model="gpt-4.1-mini", input=self.messages, tools=TOOLS
             )
-            output = response.output[0]
-            if hasattr(output, "type") and output.type in [
-                "tool_call",
-                "function_call",
-            ]:
-                tool_name = output.name
-                arguments = json.loads(output.arguments)
-                if tool_name not in TOOL_FUNCTIONS:
-                    return f"Nieznane narzędzie: {tool_name}"
-                tool_function = TOOL_FUNCTIONS[tool_name]
-                try:
-                    result = tool_function(**arguments)
-                except TypeError as e:
-                    logger.error(e)
-                    return "Nie udało sie wywoałć narzędzia"
+            tool_calls = [
+                r
+                for r in response.output
+                if getattr(r, "type", None) in ["tool_call", "function_call"]
+            ]
+            if tool_calls:
+                call_left -= 1
+                for call in tool_calls:
 
+                    if call.name not in TOOL_FUNCTIONS:
+                        return f"Nieznane narzędzie: {call.name}"
+                    tool_function = TOOL_FUNCTIONS[call.name]
+                    try:
+                        result = tool_function(**json.loads(call.arguments))
+                    except TypeError as e:
+                        logger.error(e)
+                        return "Nie udało sie wywoałć narzędzia"
 
-                self.messages.append({"role": "assistant", "content": result})
-
+                    self.messages.append({"role": "assistant", "content": result})
+                print(call_left)
                 continue
 
             text = response.output_text
