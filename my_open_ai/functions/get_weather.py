@@ -1,3 +1,5 @@
+from typing import Annotated
+
 import requests
 
 from my_open_ai.config import config
@@ -5,7 +7,12 @@ from my_open_ai.config import config
 WEATHER_API_KEY = config.weather_api_key
 
 
-def get_weather(city: str) -> str:
+def get_weather(
+    city: Annotated[str, "Miasto, dla którego chcesz sprawdzić pogodę"]
+) -> Annotated[
+    str,
+    "Miasto: ..., Temperatura: ... °C, Odczuwalna: ... °C, Pogoda: ..., Wilgotność: ... %",
+]:
     if not city:
         return "Nie podałeś miasta"
     url = "https://api.openweathermap.org/data/2.5/weather"
