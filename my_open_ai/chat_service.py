@@ -12,7 +12,8 @@ class ChatService:
         self.messages = [
             {
                 "role": "system",
-                "content": "I'm pretty smart chatbot. You can use function or ask me about my opinion.",
+                "content": "I'm pretty smart chatbot. "
+                           "You can use function or ask me about my opinion.",
             }
         ]
 
